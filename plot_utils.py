@@ -230,6 +230,124 @@ def draw_pitch(pitch, line, orientation, view, alpha=1):
         ax.add_artist(rec1)
         ax.add_artist(rec2)
         ax.add_artist(circle3)
+
+pitch_layout = dict(hovermode='closest', autosize=False,
+                                    width=825,
+                                    height=600,
+                                    plot_bgcolor='rgb(59,205,55)',
+                                    xaxis={
+                                        'range': [0, 100],
+                                        'showgrid': False,
+                                        'showticklabels': True,
+                                    },
+                                    yaxis={
+                                        'range': [0, 100],
+                                        'showgrid': False,
+                                        'showticklabels': True,
+                                    },
+                                    shapes=[
+                                        {
+                                            'type': 'circle',
+                                            'xref': 'x',
+                                            'yref': 'y',
+                                            'y0': 35,
+                                            'x0': 40,
+                                            'y1': 65,
+                                            'x1': 60,
+                                            'line': {
+                                                'color': 'white',
+                                            },
+                                            
+                                        },
+                                     {
+                                            'type': 'line',
+                                            'xref': 'x',
+                                            'yref': 'y',
+                                            'y0': 35,
+                                            'x0': 0,
+                                            'y1': 35,
+                                            'x1': 10,                                         
+                                            'line': {
+                                                'color': 'white',
+                                            },
+                                            
+                                        },
+                                     {
+                                            'type': 'line',
+                                            'xref': 'x',
+                                            'yref': 'y',
+                                            'y0': 35,
+                                            'x0': 10,
+                                            'y1': 65,
+                                            'x1': 10,
+                                            'line': {
+                                                'color': 'white',
+                                            }
+                                     },
+                                    {
+                                        'type': 'line',
+                                        'xref': 'x',
+                                        'yref': 'y',
+                                        'y0': 65,
+                                        'x0': 10,
+                                        'y1': 65,
+                                        'x1': 0,
+                                        'line': {
+                                            'color': 'white',
+                                        }
+                                      },
+                                    {
+                                            'type': 'line',
+                                            'xref': 'x',
+                                            'yref': 'y',
+                                            'y0': 35,
+                                            'x0': 100,
+                                            'y1': 35,
+                                            'x1': 90,                                         
+                                            'line': {
+                                                'color': 'white',
+                                            },
+                                            
+                                        },
+                                     {
+                                            'type': 'line',
+                                            'xref': 'x',
+                                            'yref': 'y',
+                                            'y0': 35,
+                                            'x0': 90,
+                                            'y1': 65,
+                                            'x1': 90,
+                                            'line': {
+                                                'color': 'white',
+                                            }
+                                     },
+                                    {
+                                        'type': 'line',
+                                        'xref': 'x',
+                                        'yref': 'y',
+                                        'y0': 65,
+                                        'x0': 90,
+                                        'y1': 65,
+                                        'x1': 100,
+                                        'line': {
+                                            'color': 'white',
+                                        }
+                                      },    
+                                    {
+                                        'type': 'line',
+                                        'xref': 'x',
+                                        'yref': 'y',
+                                        'y0': 100,
+                                        'x0': 50,
+                                        'y1': 0,
+                                        'x1': 50,
+                                        'line': {
+                                            'color': 'white',
+                                        }
+                                      }, 
+                                    ]
+)
+
         
 def plot_kde_events_on_field(tournaments, events, event_types=['Duel', 'Foul', 'Free Kick', 
                                                        'Interruption', 'Offside', 
