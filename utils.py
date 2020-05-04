@@ -19,6 +19,7 @@ import scipy as sp
 from scipy import stats
 from scipy import optimize
 from scipy.integrate import quad
+import matplotlib.pyplot as plt 
 
 
 def load_jsons(data_folder='data/', tournaments=['Italy','England','Germany', 
@@ -479,9 +480,9 @@ def get_event_name(event):
     return event_name
     
 
-def passing_network(match_Id = 2576105):
-
-    for nation in nations:
+def passing_network(matches, competitions, events, match_Id = 2576105, tournaments=['Italy']):
+    
+    for nation in tournaments:
         for match in matches[nation]:
             if match['wyId'] == match_Id:
                 for competition in competitions:
