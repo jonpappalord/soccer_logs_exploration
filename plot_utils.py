@@ -1,9 +1,12 @@
 import matplotlib.pyplot as plt 
 from matplotlib.patches import Ellipse
+from matplotlib.ticker import FormatStrFormatter
 import pandas as pd
 import seaborn as sns
 from collections import Counter
 import numpy as np
+from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
+import plotly.graph_objs as go
 
 data_folder = 'data/'
 tags_names_df = pd.read_csv(data_folder + 'tags2name.csv')
@@ -231,124 +234,178 @@ def draw_pitch(pitch, line, orientation, view, alpha=1):
         ax.add_artist(rec2)
         ax.add_artist(circle3)
 
-pitch_layout = dict(hovermode='closest', autosize=False,
-                                    width=825,
-                                    height=600,
-                                    plot_bgcolor='rgb(59,205,55)',
-                                    xaxis={
-                                        'range': [0, 100],
-                                        'showgrid': False,
-                                        'showticklabels': True,
-                                    },
-                                    yaxis={
-                                        'range': [0, 100],
-                                        'showgrid': False,
-                                        'showticklabels': True,
-                                    },
-                                    shapes=[
+
+def get_pitch_layout(title):
+    lines_color = 'black'
+    bg_color = 'rgb(255, 255, 255)'
+    pitch_layout = dict(hovermode='closest', autosize=False,
+                                        width=825,
+                                        height=600,
+                                        plot_bgcolor=bg_color,#'rgb(59,205,55)',
+                                        xaxis={
+                                            'range': [0, 100],
+                                            'showgrid': False,
+                                            'showticklabels': False,
+                                        },
+                                        yaxis={
+                                            'range': [0, 100],
+                                            'showgrid': False,
+                                            'showticklabels': False,
+                                        },
+                                        title=title,
+                                        shapes=[
+                                            {
+                                                'type': 'circle',
+                                                'xref': 'x',
+                                                'yref': 'y',
+                                                'y0': 35,
+                                                'x0': 40,
+                                                'y1': 65,
+                                                'x1': 60,
+                                                'line': {
+                                                    'color': lines_color,
+                                                },
+
+                                            },
+                                         {
+                                                'type': 'line',
+                                                'xref': 'x',
+                                                'yref': 'y',
+                                                'y0': 35,
+                                                'x0': 0,
+                                                'y1': 35,
+                                                'x1': 10,                                         
+                                                'line': {
+                                                    'color': lines_color,
+                                                },
+
+                                            },
+                                         {
+                                                'type': 'line',
+                                                'xref': 'x',
+                                                'yref': 'y',
+                                                'y0': 35,
+                                                'x0': 10,
+                                                'y1': 65,
+                                                'x1': 10,
+                                                'line': {
+                                                    'color': lines_color,
+                                                }
+                                         },
                                         {
-                                            'type': 'circle',
-                                            'xref': 'x',
-                                            'yref': 'y',
-                                            'y0': 35,
-                                            'x0': 40,
-                                            'y1': 65,
-                                            'x1': 60,
-                                            'line': {
-                                                'color': 'white',
-                                            },
-                                            
-                                        },
-                                     {
                                             'type': 'line',
                                             'xref': 'x',
                                             'yref': 'y',
-                                            'y0': 35,
-                                            'x0': 0,
-                                            'y1': 35,
-                                            'x1': 10,                                         
-                                            'line': {
-                                                'color': 'white',
-                                            },
-                                            
-                                        },
-                                     {
-                                            'type': 'line',
-                                            'xref': 'x',
-                                            'yref': 'y',
-                                            'y0': 35,
+                                            'y0': 65,
                                             'x0': 10,
                                             'y1': 65,
-                                            'x1': 10,
+                                            'x1': 0,
                                             'line': {
-                                                'color': 'white',
+                                                'color': lines_color,
                                             }
-                                     },
-                                    {
-                                        'type': 'line',
-                                        'xref': 'x',
-                                        'yref': 'y',
-                                        'y0': 65,
-                                        'x0': 10,
-                                        'y1': 65,
-                                        'x1': 0,
-                                        'line': {
-                                            'color': 'white',
-                                        }
-                                      },
-                                    {
-                                            'type': 'line',
-                                            'xref': 'x',
-                                            'yref': 'y',
-                                            'y0': 35,
-                                            'x0': 100,
-                                            'y1': 35,
-                                            'x1': 90,                                         
-                                            'line': {
-                                                'color': 'white',
+                                          },
+                                        {
+                                                'type': 'line',
+                                                'xref': 'x',
+                                                'yref': 'y',
+                                                'y0': 35,
+                                                'x0': 100,
+                                                'y1': 35,
+                                                'x1': 90,                                         
+                                                'line': {
+                                                    'color': lines_color,
+                                                },
+
                                             },
-                                            
-                                        },
-                                     {
+                                         {
+                                                'type': 'line',
+                                                'xref': 'x',
+                                                'yref': 'y',
+                                                'y0': 35,
+                                                'x0': 90,
+                                                'y1': 65,
+                                                'x1': 90,
+                                                'line': {
+                                                    'color': lines_color,
+                                                }
+                                         },
+                                        {
                                             'type': 'line',
                                             'xref': 'x',
                                             'yref': 'y',
-                                            'y0': 35,
+                                            'y0': 65,
                                             'x0': 90,
                                             'y1': 65,
-                                            'x1': 90,
+                                            'x1': 100,
                                             'line': {
-                                                'color': 'white',
+                                                'color': lines_color,
                                             }
-                                     },
-                                    {
-                                        'type': 'line',
-                                        'xref': 'x',
-                                        'yref': 'y',
-                                        'y0': 65,
-                                        'x0': 90,
-                                        'y1': 65,
-                                        'x1': 100,
-                                        'line': {
-                                            'color': 'white',
-                                        }
-                                      },    
-                                    {
-                                        'type': 'line',
-                                        'xref': 'x',
-                                        'yref': 'y',
-                                        'y0': 100,
-                                        'x0': 50,
-                                        'y1': 0,
-                                        'x1': 50,
-                                        'line': {
-                                            'color': 'white',
-                                        }
-                                      }, 
-                                    ]
-)
-
+                                          },    
+                                        {
+                                            'type': 'line',
+                                            'xref': 'x',
+                                            'yref': 'y',
+                                            'y0': 100,
+                                            'x0': 50,
+                                            'y1': 0,
+                                            'x1': 50,
+                                            'line': {
+                                                'color': lines_color,
+                                            }
+                                          },
+                                        {
+                                            'type': 'line',
+                                            'xref': 'x',
+                                            'yref': 'y',
+                                            'y0': 0,
+                                            'x0': 0,
+                                            'y1': 100,
+                                            'x1': 0,
+                                            'line': {
+                                                'color': lines_color,
+                                            }
+                                          },
+                                        {
+                                            'type': 'line',
+                                            'xref': 'x',
+                                            'yref': 'y',
+                                            'y0': 0,
+                                            'x0': 100,
+                                            'y1': 100,
+                                            'x1': 100,
+                                            'line': {
+                                                'color': lines_color,
+                                            }
+                                          },
+                                        {
+                                            'type': 'line',
+                                            'xref': 'x',
+                                            'yref': 'y',
+                                            'y0': 100,
+                                            'x0': 0,
+                                            'y1': 100,
+                                            'x1': 100,
+                                            'line': {
+                                                'color': lines_color,
+                                            }
+                                          },
+                                        {
+                                            'type': 'line',
+                                            'xref': 'x',
+                                            'yref': 'y',
+                                            'y0': 0,
+                                            'x0': 0,
+                                            'y1': 0,
+                                            'x1': 100,
+                                            'line': {
+                                                'color': lines_color,
+                                            }
+                                          },
+                                        ]
+    )
+    return pitch_layout  
         
+    
 def plot_kde_events_on_field(tournaments, events, event_types=['Duel', 'Foul', 'Free Kick', 
                                                        'Interruption', 'Offside', 
                                                       'Others on the ball', 'Pass',
@@ -447,4 +504,62 @@ def in_match_evolution(tournaments, events, event_name='Goal', event_tag=101):
     plt.ylabel('%s (n)'%event_name, fontsize=25)
     plt.grid(alpha=0.3)
     fig.tight_layout()
+    plt.show()
+
+    
+def plot_invasion_and_acceleration_index(match_label, list_invasion, list_acceleration):
+    sns.set_style('ticks')
+    fig, ax = plt.subplots(2,1, figsize=(10,10), sharex=True)
+
+    print ('INVASION INDEX')
+    for i, c, label in zip(list(list_invasion), 
+                           ['darkred','k'], ['AS Roma','ACF Fiorentina']):
+        df_invasion = pd.DataFrame(list_invasion[i], columns=['time','invasion'])
+        df_invasion['time'] = [x/60. for x in df_invasion.time]
+        print(label, round(df_invasion['invasion'].mean(), 2), 
+              round(df_invasion['invasion'].std(), 2))
+        ax[0].plot(df_invasion.set_index('time').rolling(220, min_periods=1).mean(),c=c,alpha=0.7,lw=4,label=label)
+
+    ax[0].legend(loc=1,fontsize=18,frameon=True,shadow=True)
+    ax[0].grid(alpha=0.1)
+    ax[0].set_ylabel('invasion index',fontsize=25)
+    ax[0].yaxis.set_tick_params(labelsize=18)
+    ax[0].text(45.8,0.45,'half time',rotation=90,bbox=dict(facecolor='w',edgecolor='r',lw=2),
+             verticalalignment='center',horizontalalignment='left',fontsize=15,color='r')
+    ax[0].vlines(47,-1,2,colors='r',lw=2)
+    ax[0].text(6,0.45,'goal',rotation=90,bbox=dict(facecolor='w',edgecolor='rebeccapurple',lw=2),
+             verticalalignment='center',horizontalalignment='left',fontsize=15,color='rebeccapurple')
+    ax[0].vlines(7,-1,2,colors='rebeccapurple',lw=2)
+    ax[0].text(38,0.45,'goal',rotation=90,bbox=dict(facecolor='w',edgecolor='rebeccapurple',lw=2),
+             verticalalignment='center',horizontalalignment='left',fontsize=15,color='rebeccapurple')
+    ax[0].vlines(39,-1,2,colors='rebeccapurple',lw=2)
+    ax[0].text(85,0.08,'(a)',fontsize=25)
+    ax[0].set_ylim(0,0.55)
+    ax[0].set_title(match_label,fontsize=35)
+
+    print ('\nACCELERATION INDEX')
+    for i,c,label in zip(list(list_acceleration), 
+                         ['darkred','k'], 
+                         ['AS Roma','ACF Fiorentina']):
+        df_acceleration = pd.DataFrame(list_acceleration[i],columns=['time','acceleration'])
+        df_acceleration['time'] = [x/60. for x in df_acceleration.time]
+        print (label, round(df_acceleration['acceleration'].mean(), 2), 
+               round(df_acceleration['acceleration'].std(), 2))
+        ax[1].plot(df_acceleration.set_index('time').rolling(220, min_periods=1).mean(),c=c,alpha=0.7,lw=4,label=label)
+    ax[1].legend(fontsize=18,frameon=True,shadow=True,loc=1)
+    ax[1].grid(alpha=0.1)
+    ax[1].set_ylabel('acceleration index', fontsize=25)
+    ax[1].xaxis.set_tick_params(labelsize=18)
+    ax[1].yaxis.set_tick_params(labelsize=18)
+    ax[1].text(85, 0.02,'(b)', fontsize=25)
+    ax[1].vlines(47, -1, 2, colors='r', lw=2)
+    plt.xlabel('time (min)', fontsize=25)
+    
+    ax[1].yaxis.set_major_formatter(FormatStrFormatter('%.2f'))
+    plt.xlim(0,95)
+    ax[1].vlines(7,-1,2,colors='rebeccapurple',lw=2)
+    ax[1].vlines(39,-1,2,colors='rebeccapurple',lw=2)
+    plt.ylim(0,0.15)
+    fig.tight_layout()
+
     plt.show()
