@@ -1,8 +1,10 @@
 import pandas as pd
 from collections import defaultdict
+from utils import get_weight
+import numpy as np
 
 data_folder = 'data/'
-tags_names_df = pd.read_csv(data_folder + 'tags2name.csv')
+tags_names_df = pd.read_csv(data_folder + 'tags2name.csv', delimiter=';')
 
 INTERRUPTION = 5
 FOUL = 2
@@ -120,7 +122,7 @@ def is_ball_lost(event, previous_event):
 def is_penalty(event):
     return event['subEventName'] == PENALTY
 
-def get_tag_list(event, tags_names_df):
+def get_tag_list(event):
     return [tags_names_df[tags_names_df.Tag == tag['id']].Description.values[0] for tag in event['tags']]
 
 def pre_process(events):
@@ -168,7 +170,7 @@ def get_play_actions(tournaments, events, match_id, verbose=False):
             for event in events[tournament]:
                 if event['matchId'] == match_id:
                     events_match.append(event)
-        
+
         half_offset = {'2H' : max([x['eventSec'] for x in events_match if x['matchPeriod']=='1H']),
                       '1H':0}
         events_match = sorted(events_match, key = lambda x: x['eventSec'] + half_offset[x['matchPeriod']])
