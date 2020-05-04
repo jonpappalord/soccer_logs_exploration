@@ -60,7 +60,12 @@ def load_public_dataset(data_folder=data_folder, tournaments=['Italy','England',
     with open('./data/competitions.json') as json_data:
         competitions = json.load(json_data)
         
-    return matches, events, players, competitions
+    # loading the competitions data
+    teams={}
+    with open('./data/teams.json') as json_data:
+        teams = json.load(json_data)
+        
+    return matches, events, players, competitions, teams
 
 def get_weight(position):
     """
