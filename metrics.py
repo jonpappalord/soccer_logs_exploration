@@ -273,7 +273,6 @@ def get_invasion_index(tournaments, events, match_id, lst=False):
     """
     # get the actions in the match
     actions = get_play_actions(tournaments, events, match_id)
-    print(len(actions))
     team2invasion_index = defaultdict(list)
     team2invasion_speed = defaultdict(list)
     
