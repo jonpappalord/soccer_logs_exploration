@@ -404,53 +404,6 @@ def get_pitch_layout(title):
                                         ]
     )
     return pitch_layout  
-        
-    
-def plot_kde_events_on_field(tournaments, events, event_types=['Duel', 'Foul', 'Free Kick', 
-                                                       'Interruption', 'Offside', 
-                                                      'Others on the ball', 'Pass',
-                                                      'Shot'], 
-                             sample_size=10000):
-    """
-    Generate density plots on the field for each event type
-    
-    Parameters
-    ----------
-    tournaments : list
-        list of tournaments
-    
-    events : list
-        the list of events
-    
-    event_types : list, optional
-        list of event names to use
-    
-    sample_size: int
-        random sample of values to use (default: 10000). The code becomes slow is you increase this value
-        significantly.
-    """
-    positions = []
-    for tournament in tournaments:
-        for event in events[tournament]:
-            positions.append([event['eventName'], event['positions'][0]['x'], 
-                                event['positions'][0]['y']])
-
-    positions_df = pd.DataFrame(positions, columns=['eventName','x','y'])
-
-    for event_type in event_types:
-        df_pos_event = positions_df[positions_df['eventName'] == event_type]
-        fig, ax = pitch()
-        if len(df_pos_event) >= 10000:
-            x_y = df_pos_event[['x','y']].sample(sample_size).astype(float)
-        else:
-            x_y = df_pos_event[['x','y']].astype(float)
-        sns.kdeplot(x_y['x'],x_y['y'], cmap = 'Greens', shade = True)
-        plt.title(event_type, fontsize = 30)
-        plt.xlim(-1,101)
-        plt.ylim(-1,101)
-        plt.axis('off')
-        fig.tight_layout()
-        plt.show()
 
 def in_match_evolution(tournaments, events, event_name='Goal', event_tag=101):
     """
