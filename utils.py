@@ -25,11 +25,11 @@ import matplotlib.pyplot as plt
 EVENT_TYPES = ['Duel', 'Foul', 'Free Kick', 'Interruption', 
              'Offside', 'Others on the ball', 'Pass', 'Shot']
 
+TOURNAMENTS=['Italy','England','Germany', 'France', 
+             'Spain', 'European_Championship','World_Cup']
 
 data_folder='data/'
-def load_public_dataset(data_folder=data_folder, tournaments=['Italy','England','Germany', 
-                                                 'France','Spain', 
-                                               'European_Championship','World_Cup']):
+def load_public_dataset(data_folder=data_folder, tournament='Italy'):
     """
     Load the json files with the matches, events, players and competitions
     
@@ -49,12 +49,21 @@ def load_public_dataset(data_folder=data_folder, tournaments=['Italy','England',
     """
     # loading the matches and events data
     matches, events = {}, {}
-    for tournament in tournaments:
-        with open('./data/events/events_%s.json' %tournament) as json_data:
-            events[tournament] = json.load(json_data)
-        with open('./data/matches/matches_%s.json' %tournament) as json_data:
-            matches[tournament] = json.load(json_data)
-
+    with open('./data/events/events_%s.json' %tournament) as json_data:
+        events = json.load(json_data)
+    with open('./data/matches/matches_%s.json' %tournament) as json_data:
+        matches = json.load(json_data)
+    
+    match_id2events = defaultdict(list)
+    match_id2match = defaultdict(list)
+    for event in events:
+        match_id = event['matchId']
+        match_id2events[match_id].append(event)
+                                         
+    for match in matches:
+        match_id = match['wyId']
+        match_id2match[match_id] = match
+                                   
     # loading the players data
     players = {}
     with open('./data/players.json') as json_data:
@@ -70,7 +79,7 @@ def load_public_dataset(data_folder=data_folder, tournaments=['Italy','England',
     with open('./data/teams.json') as json_data:
         teams = json.load(json_data)
         
-    return matches, events, players, competitions, teams
+    return match_id2match, match_id2events, players, competitions, teams
 
 def get_weight(position):
     """
