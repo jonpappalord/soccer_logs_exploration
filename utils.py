@@ -21,6 +21,11 @@ from scipy import optimize
 from scipy.integrate import quad
 import matplotlib.pyplot as plt 
 
+
+EVENT_TYPES = ['Duel', 'Foul', 'Free Kick', 'Interruption', 
+             'Offside', 'Others on the ball', 'Pass', 'Shot']
+
+
 data_folder='data/'
 def load_public_dataset(data_folder=data_folder, tournaments=['Italy','England','Germany', 
                                                  'France','Spain', 
@@ -150,6 +155,16 @@ def get_event_name(event):
     
     return event_name
     
+def is_in_match(player_id, match):
+    team_ids = list(match['teamsData'].keys())
+    all_players = []
+    for team in team_ids:
+        in_bench_players = [m['playerId'] for m in match['teamsData'][team]['formation']['bench']]
+        in_lineup_players = [m['playerId'] for m in match['teamsData'][team]['formation']['lineup']]
+        substituting_players = [m['playerIn'] for m in match['teamsData'][team]['formation']['substitutions']]
+        all_players += in_bench_players + in_lineup_players + substituting_players
+    return player_id in all_players
+
 
     
 
