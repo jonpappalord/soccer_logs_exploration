@@ -21,7 +21,7 @@ from scipy import optimize
 from scipy.integrate import quad
 import matplotlib.pyplot as plt 
 
-
+ACCURATE_PASS = 1801
 EVENT_TYPES = ['Duel', 'Foul', 'Free Kick', 'Interruption', 
              'Offside', 'Others on the ball', 'Pass', 'Shot']
 
