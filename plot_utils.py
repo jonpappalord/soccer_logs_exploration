@@ -405,60 +405,6 @@ def get_pitch_layout(title):
     )
     return pitch_layout  
 
-def in_match_evolution(tournaments, events, event_name='Goal', event_tag=101):
-    """
-    """
-    events_time = []
-    for tournament in tournaments:
-        for event in events[tournament]:
-            tags = event['tags']
-            for tag in tags:
-                if tag['id'] == event_tag:
-                    events_time.append([event['matchId'], event['matchPeriod'], 
-                                    event['eventSec']])
-                
-    # let us convert it into a DataFrame
-    event_df = pd.DataFrame(events_time, columns=['matchId','matchPeriod','eventSec'])
-    
-    fig, ax = plt.subplots(figsize=(8,6))
-    start_bin_label = 1
-    max_bin_count = 0
-    
-    for half, color_bar, color_last_bar in zip(['1H','2H'], 
-                                               ['blue','green'], 
-                                               ['skyblue','lightgreen']):
-        
-        df_half = event_df[event_df['matchPeriod'] == half].sort_values(['matchPeriod','eventSec'])
-        bins = range(0, int(df_half['eventSec'].max())+1)[::300]
-        labels = range(start_bin_label,start_bin_label+len(bins)-1)
-        df_half['binned'] = pd.cut(df_half['eventSec'], bins=bins, labels=labels)
-        df_half = df_half.sort_values('binned')
-        barlist = plt.bar(Counter(df_half.binned.dropna()).keys(),Counter(df_half.binned.dropna()).values(),label=half,color=color_bar)
-        if len(bins) == 11:
-            barlist = barlist[len(bins)-2].set_color(color_last_bar)
-        max_bin_half = np.max(list(Counter(df_half.binned.dropna()).values()))
-        if max_bin_half > max_bin_count:
-            max_bin_count = max_bin_half
-        start_bin_label = 12
-    
-    plt.legend(loc=2, fontsize=15, frameon=True, shadow=True)
-    plt.xticks(list(range(1,23)),['0-5','5-10','10-15','15-20','20-25','25-30','30-35','35-40','40-45','>45','',
-                                  '45-50','50-55','55-60','60-65','65-70','70-75','75-80','80-85','85-90','>90'],
-              rotation=90, fontsize=18)
-    plt.yticks(fontsize=18)
-    plt.ylim(0,max_bin_count+(max_bin_count/100*10))
-    plt.xlim(0, 22)
-    plt.text(10.65, max_bin_count-(max_bin_count/100*10), 'half time', rotation=90, 
-             bbox=dict(facecolor='w',edgecolor='r'),
-             verticalalignment='center', horizontalalignment='left', fontsize=15, 
-             color='tomato')
-    plt.vlines(11, 0, max_bin_count+(max_bin_count/100*10),colors='r',alpha=0.5)
-    plt.xlabel('match time (min)', fontsize=25)
-    plt.ylabel('%s (n)'%event_name, fontsize=25)
-    plt.grid(alpha=0.3)
-    fig.tight_layout()
-    plt.show()
-
     
 def plot_invasion_and_acceleration_index(match_label, list_invasion, list_acceleration):
     sns.set_style('ticks')
