@@ -153,7 +153,7 @@ def pre_process(events):
     return filtered_events
 
 
-def get_play_actions(tournaments, events, match_id, verbose=False):
+def get_play_actions(match_id2events, match_id, verbose=False):
     """
     Given a list of events occuring during a game, it splits the events
     into play actions using the following principle:
@@ -165,12 +165,7 @@ def get_play_actions(tournaments, events, match_id, verbose=False):
     
     """
     try:
-        events_match = []
-        for tournament in tournaments:
-            for event in events[tournament]:
-                if event['matchId'] == match_id:
-                    events_match.append(event)
-
+        events_match = match_id2events[match_id]
         half_offset = {'2H' : max([x['eventSec'] for x in events_match if x['matchPeriod']=='1H']),
                       '1H':0}
         events_match = sorted(events_match, key = lambda x: x['eventSec'] + half_offset[x['matchPeriod']])
