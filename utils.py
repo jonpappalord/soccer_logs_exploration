@@ -55,7 +55,7 @@ def load_public_dataset(data_folder=data_folder, tournament='Italy'):
         matches = json.load(json_data)
     
     match_id2events = defaultdict(list)
-    match_id2match = defaultdict(list)
+    match_id2match = defaultdict(dict)
     for event in events:
         match_id = event['matchId']
         match_id2events[match_id].append(event)
@@ -65,21 +65,33 @@ def load_public_dataset(data_folder=data_folder, tournament='Italy'):
         match_id2match[match_id] = match
                                    
     # loading the players data
-    players = {}
     with open('./data/players.json') as json_data:
         players = json.load(json_data)
-
+    
+    player_id2player = defaultdict(dict)
+    for player in players:
+        player_id = player['wyId']
+        player_id2player[player_id] = player
+    
     # loading the competitions data
     competitions={}
     with open('./data/competitions.json') as json_data:
         competitions = json.load(json_data)
-        
+    competition_id2competition = defaultdict(dict)
+    for competition in competitions:
+        competition_id = competition['wyId']
+        competition_id2competition[competition_id] = competition
+    
     # loading the competitions data
     teams={}
     with open('./data/teams.json') as json_data:
         teams = json.load(json_data)
-        
-    return match_id2match, match_id2events, players, competitions, teams
+    team_id2team = defaultdict(dict)
+    for team in teams:
+        team_id = team['wyId']
+        team_id2team[team_id] = team
+    
+    return match_id2match, match_id2events, player_id2player, competition_id2competition, team_id2team
 
 def get_weight(position):
     """
