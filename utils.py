@@ -1,4 +1,5 @@
 import json
+from tqdm import tqdm
 from collections import Counter
 import numpy as np
 import operator
@@ -206,6 +207,7 @@ def data_download():
     'events' : 'https://ndownloader.figshare.com/files/14464685',
     'players' : 'https://ndownloader.figshare.com/files/15073721',
     'teams': 'https://ndownloader.figshare.com/files/15073697',
+    'competitions': 'https://ndownloader.figshare.com/files/15073685'
     }
 
     print ("Downloading matches data")
@@ -213,11 +215,7 @@ def data_download():
     z = zipfile.ZipFile(io.BytesIO(r.content))
     z.extractall("data/matches")
 
-    print ("Downloading events data")
-    r = requests.get(dataset_links['events'], stream=True)
-    z = zipfile.ZipFile(io.BytesIO(r.content))
-    z.extractall("data/events")
-    #
+    
     print ("Downloading teams data")
     r = requests.get(dataset_links['teams'], stream=False)
     print (r.text, file=open('data/teams.json','w'))
@@ -226,6 +224,15 @@ def data_download():
     print ("Downloading players data")
     r = requests.get(dataset_links['players'], stream=False)
     print (r.text, file=open('data/players.json','w'))
+    
+    print ("Downloading competitions data")
+    r = requests.get(dataset_links['competitions'], stream=False)
+    print (r.text, file=open('data/competitions.json','w'))
+    
+    print ("Downloading events data")
+    r = requests.get(dataset_links['events'], stream=True)
+    z = zipfile.ZipFile(io.BytesIO(r.content))
+    z.extractall("data/events")
     
     print ("Download completed")
 
